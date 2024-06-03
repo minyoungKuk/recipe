@@ -1,7 +1,13 @@
 import React from 'react';
+import './App.css';
+import Login from './Login.jsx';
 
 function App() {
-  return <div>앱 컴포넌트</div>;
+  return (
+    <div className="App">
+      <Login />
+    </div>
+  );
 }
 
 export default App;
