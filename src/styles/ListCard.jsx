@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 const StRecipeList = styled.ul`
   max-width: 1200px;
   display: grid;
@@ -16,7 +16,7 @@ const StRecipeItem = styled.li`
   flex-direction: column;
   align-items: flex-start;
   margin: 10px;
-  width: 240px;
+  width: 280;
   height: 320px;
   border: 1px solid black;
   border-radius: 10px;
@@ -29,7 +29,7 @@ const StRecipeImage = styled.div`
   background-color: #eaeaea;
   margin: 0 auto;
   margin-top: 20px;
-  background-image: url('../public/images/icon/ic-back.png'); /* 이미지 URL 설정 */
+  background-image: url("../public/images/icon/ic-back.png"); /* 이미지 URL 설정 */
   background-size: cover;
   background-position: center;
   border-radius: 3px;
