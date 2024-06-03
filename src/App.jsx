@@ -1,7 +1,12 @@
-import React from 'react';
+import React from "react";
+import Signup from "./components/Signup";
 
 function App() {
-  return <div>앱 컴포넌트</div>;
+  return (
+    <div>
+      <Signup />
+    </div>
+  );
 }
 
 export default App;
