@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import Button from "./Button";
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import styled from 'styled-components';
+import Button from './Button';
 
 const Form = styled.form.attrs(() => ({
-  style: { width: "340px" },
+  style: { width: '340px' },
 }))``;
 
 const FormGroup = styled.div`
@@ -16,9 +16,17 @@ const ButtonContainer = styled.div`
   justify-content: center;
 `;
 
+const StyledInput = styled.input`
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -30,7 +38,7 @@ const Login = () => {
   const handleSignup = useCallback(
     (e) => {
       e.preventDefault();
-      console.log("회원가입:", { email, password });
+      console.log('회원가입:', { email, password });
     },
     [email, password]
   );
@@ -38,7 +46,7 @@ const Login = () => {
   const handleLogin = useCallback(
     (e) => {
       e.preventDefault();
-      console.log("로그인:", { email, password });
+      console.log('로그인:', { email, password });
     },
     [email, password]
   );
@@ -48,7 +56,7 @@ const Login = () => {
       <Form>
         <FormGroup>
           <label htmlFor="email"> 아이디(이메일) </label>
-          <input
+          <StyledInput
             type="text"
             id="email"
             value={email}
@@ -57,7 +65,7 @@ const Login = () => {
             required
           />
           <label htmlFor="password"> 비밀번호 </label>
-          <input
+          <StyledInput
             type="password"
             id="password"
             value={password}
