@@ -36,6 +36,40 @@ const GlobalStyle = createGlobalStyle`
       outline-color: #02024a;
     }
   }
+
+  textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #cecece;
+    border-radius: 5px;
+
+    font-family: "Noto Sans KR";
+
+    &:focus {
+      outline-color: #02024a;
+    }
+  }
+
+  .main {
+  width: 1080px;
+  margin: auto;
+
+  display: flex;
+  justify-content: center;
+
+  /* background-color: skyblue; */
+  }
+
+  .wrapper {
+  width: 720px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+
+  /* background-color: yellow; */
+  }
 `;
 
 export default GlobalStyle;
