@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { signUp } from "../redux/slices/auth.slice";
 import { openModal } from "../redux/slices/modal.slice";
 import Button from "./Button";
 
@@ -59,20 +60,26 @@ const SignUp = () => {
   const handleSignup = useCallback(
     (e) => {
       e.preventDefault();
-    },
-    [email, nickname, password, chkPassword]
-  );
 
-  const handleLogin = useCallback(
-    (e) => {
-      e.preventDefault();
+      if (password !== chkPassword) {
+        dispatch(
+          openModal({
+            modalType: "alert",
+            modalProps: { message: "비밀번호가 일치하지 않습니다." },
+          })
+        );
+
+        return;
+      }
+
+      dispatch(signUp({ email, nickname, password }));
     },
-    [email, password]
+    [dispatch, email, nickname, password, chkPassword]
   );
 
   return (
     <div className="container">
-      <Form>
+      <Form onSubmit={handleSignup}>
         <FormGroup>
           <label htmlFor="email">아이디(이메일)</label>
           <input
@@ -110,7 +117,7 @@ const SignUp = () => {
         </FormGroup>
 
         <ButtonContainer>
-          <Button color="#FE9234" onClick={handleLogin}>
+          <Button color="#FE9234" onClick={handleSignup}>
             회원가입
           </Button>
           <Button onClick={handleClickButton}>dd</Button>

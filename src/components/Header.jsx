@@ -3,10 +3,10 @@ import styled from "styled-components";
 import Button from "./Button";
 
 const StyledHeaderContainer = styled.header`
+  box-sizing: border-box;
   width: 100%;
-  height: 50px;
   background-color: #ffffff;
-  padding: 20px 40px;
+  padding: 0 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,7 +53,9 @@ const StyledButtonContainer = styled.div`
 `;
 
 const ButtonWrapperWithMargin = styled.div`
-  margin-right: 20px;
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Header = () => {
@@ -71,10 +73,11 @@ const Header = () => {
       <StyledButtonContainer>
         <StyledSearchInput type="text" placeholder="search.." />
         <StyledSearchIcon src="/images/icon/ic-search.png" alt="검색 아이콘" />
-        <Button color="#FE9F4D" size="small" onClick={handleMyPageClick}>
-          마이페이지
-        </Button>
+
         <ButtonWrapperWithMargin>
+          <Button color="#FE9F4D" size="small" onClick={handleMyPageClick}>
+            마이페이지
+          </Button>
           <Button color="#FE9234" size="small" onClick={handleLoginClick}>
             로그인
           </Button>
