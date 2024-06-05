@@ -1,10 +1,12 @@
 import React from "react";
-import Signup from "./components/Signup";
+import { RouterProvider } from "react-router-dom";
+import router from "./routes/router";
 
 function App() {
   return (
     <div>
-      <Signup />
+      {/* <Signup /> */}
+      <RouterProvider router={router} />
     </div>
   );
 }
