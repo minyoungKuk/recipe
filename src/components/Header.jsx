@@ -1,11 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import Button from './Button';
+import React from "react";
+import styled from "styled-components";
+import Button from "./Button";
 
 const StyledHeaderContainer = styled.header`
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 50px;
   background-color: #ffffff;
@@ -61,11 +58,11 @@ const ButtonWrapperWithMargin = styled.div`
 
 const Header = () => {
   const handleMyPageClick = () => {
-    console.log('마이페이지 클릭');
+    console.log("마이페이지 클릭");
   };
 
   const handleLoginClick = () => {
-    console.log('로그인 클릭');
+    console.log("로그인 클릭");
   };
 
   return (
