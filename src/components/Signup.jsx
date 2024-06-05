@@ -33,7 +33,7 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
 `;
 
-const Signup = () => {
+const SignUp = () => {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
@@ -120,4 +120,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignUp;
