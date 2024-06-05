@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { openModal } from "../redux/slices/modal.slice";
 import Button from "./Button";
 
 const Form = styled.form`
@@ -28,6 +30,7 @@ const FormGroup = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+  justify-content: space-between;
 `;
 
 const Signup = () => {
@@ -36,6 +39,16 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [chkPassword, setChkPassword] = useState("");
   const emailRef = useRef(null);
+  const dispatch = useDispatch();
+
+  const handleClickButton = useCallback(() => {
+    dispatch(
+      openModal({
+        modalType: "alert",
+        modalProps: { message: "테스트 내용 . . . .ㅎ" },
+      })
+    );
+  }, [dispatch]);
 
   useEffect(() => {
     if (emailRef.current) {
@@ -97,9 +110,10 @@ const Signup = () => {
         </FormGroup>
 
         <ButtonContainer>
-          <Button color="#FE9234" size="large" onClick={handleLogin}>
+          <Button color="#FE9234" onClick={handleLogin}>
             회원가입
           </Button>
+          <Button onClick={handleClickButton}>dd</Button>
         </ButtonContainer>
       </Form>
     </div>

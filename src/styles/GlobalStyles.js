@@ -70,6 +70,18 @@ const GlobalStyle = createGlobalStyle`
 
   /* background-color: yellow; */
   }
+
+  .modal {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    max-width: 360px;
+    width: 100%;
+
+    p {
+      padding-bottom: 40px;
+    }
+  }
 `;
 
 export default GlobalStyle;
