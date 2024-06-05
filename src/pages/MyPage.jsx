@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 
 export const MyPage = () => {
   const [profileImg, setProfileImg] = useState(null);
@@ -22,15 +22,15 @@ export const MyPage = () => {
       <div>
         <div
           style={{
-            width: '200px',
-            height: '200px',
-            border: '1px solid black',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            overflow: 'hidden',
-            cursor: 'pointer',
-            borderRadius: '50%',
+            width: "200px",
+            height: "200px",
+            border: "1px solid black",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            overflow: "hidden",
+            cursor: "pointer",
+            borderRadius: "50%",
           }}
           onClick={handleImageClick}
         >
@@ -39,9 +39,9 @@ export const MyPage = () => {
               src={profileImg}
               alt="프로필 사진"
               style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
               }}
             />
           ) : (
@@ -49,9 +49,9 @@ export const MyPage = () => {
               src="../public/images/icon/ic-back.png"
               alt="기본 이미지"
               style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
               }}
             />
           )}
@@ -60,7 +60,7 @@ export const MyPage = () => {
           type="file"
           onChange={onChangeImg}
           ref={fileInputRef}
-          style={{ display: 'none' }}
+          style={{ display: "none" }}
         />
       </div>
     </div>
