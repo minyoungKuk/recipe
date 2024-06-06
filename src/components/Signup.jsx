@@ -63,13 +63,14 @@ const SignUp = () => {
         return;
       }
 
+      console.log(email);
       const { data: existingUser, error } = await supabase
         .from("users")
-        .select()
-        .eq("email", email)
-        .single();
+        .select("*")
+        .eq("email", email);
+      // .single();
 
-      if (existingUser) {
+      if (existingUser.email === email) {
         dispatch(
           openModal({
             modalType: "alert",

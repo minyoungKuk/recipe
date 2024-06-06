@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { logout } from "../redux/slices/auth.slice";
 import { openModal } from "../redux/slices/modal.slice";
 import Button from "./Button";
 
@@ -61,9 +60,8 @@ const ButtonWrapperWithMargin = styled.div`
   justify-content: space-between;
 `;
 
-const Header = () => {
+const Header = ({ isLoggedIn, onLogout }) => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const handleMyPageClick = () => {
     console.log("마이페이지 클릭");
@@ -71,10 +69,6 @@ const Header = () => {
 
   const handleLoginClick = useCallback(() => {
     dispatch(openModal({ modalType: "login" }));
-  }, [dispatch]);
-
-  const handleLogoutClick = useCallback(() => {
-    dispatch(logout());
   }, [dispatch]);
 
   return (
@@ -89,7 +83,7 @@ const Header = () => {
             마이페이지
           </Button>
           {isLoggedIn ? (
-            <Button color="#FE9234" size="small" onClick={handleLogoutClick}>
+            <Button color="#FE9234" size="small" onClick={onLogout}>
               로그아웃
             </Button>
           ) : (
