@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { signOut } from "../redux/slices/auth.slice";
 import { openModal } from "../redux/slices/modal.slice";
 import Button from "./Button";
 
@@ -71,6 +72,10 @@ const Header = ({ isLoggedIn, onLogout }) => {
     dispatch(openModal({ modalType: "login" }));
   }, [dispatch]);
 
+  const handleLogoutClick = () => {
+    dispatch(signOut());
+  };
+
   return (
     <StyledHeaderContainer>
       <StyledLogo src="/images/icon/Logo.png" alt="로고" />
@@ -83,7 +88,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
             마이페이지
           </Button>
           {isLoggedIn ? (
-            <Button color="#FE9234" size="small" onClick={onLogout}>
+            <Button color="#FE9234" size="small" onClick={handleLogoutClick}>
               로그아웃
             </Button>
           ) : (

@@ -35,7 +35,7 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
 `;
 
-const SignUp = () => {
+const SignUp = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
@@ -63,14 +63,13 @@ const SignUp = () => {
         return;
       }
 
-      console.log(email);
       const { data: existingUser, error } = await supabase
         .from("users")
         .select("*")
         .eq("email", email);
       // .single();
 
-      if (existingUser.email === email) {
+      if (existingUser && existingUser.length > 0) {
         dispatch(
           openModal({
             modalType: "alert",
@@ -81,8 +80,9 @@ const SignUp = () => {
       }
 
       dispatch(signUp({ email, password, nickname }));
+      onClose();
     },
-    [dispatch, email, nickname, password, chkPassword]
+    [dispatch, email, nickname, password, chkPassword, onClose]
   );
 
   return (
@@ -125,7 +125,7 @@ const SignUp = () => {
         </FormGroup>
 
         <ButtonContainer>
-          <Button color="#FE9234" size="large" onClick={handleSignup}>
+          <Button color="#FE9234" size="large" type="submit">
             회원가입
           </Button>
         </ButtonContainer>
