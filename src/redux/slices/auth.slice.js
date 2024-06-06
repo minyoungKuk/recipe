@@ -8,12 +8,11 @@ const initialState = {
   isLoginOpen: false,
 };
 
-console.log(initialState.isLoginOpen);
 export const signUp = createAsyncThunk(
   "auth/signUp",
   async ({ email, password, nickname }, thunkAPI) => {
     try {
-      const { user, error } = await supabase.auth.signUp({
+      const { data: user, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -34,10 +33,8 @@ export const signUp = createAsyncThunk(
         throw new Error(insertError.message);
       }
 
-      // return user;
+      return user;
     } catch (error) {
-      console.log("error ", error);
-
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -47,7 +44,7 @@ export const signIn = createAsyncThunk(
   "auth/signIn",
   async ({ email, password }, thunkAPI) => {
     try {
-      const { user, error } = await supabase.auth.signInWithPassword({
+      const { data: user, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -55,12 +52,14 @@ export const signIn = createAsyncThunk(
       if (error) {
         throw new Error("로그인에 실패하였습니다. 다시 시도해주세요.");
       }
+
       return user;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
+
 export const signOut = createAsyncThunk("auth/signOut", async (_, thunkAPI) => {
   try {
     await supabase.auth.signOut();
@@ -121,16 +120,6 @@ const authSlice = createSlice({
         state.isLoggedIn = false;
         alert(action.payload);
       });
-    // .addCase(signOut.fulfilled, (state) => {
-    //   state.user = null;
-    //   state.error = null;
-    //   state.isLoggedIn = false;
-    //   sessionStorage.removeItem("user");
-    //   sessionStorage.setItem("isLoggedIn", "false");
-    // })
-    // .addCase(signOut.rejected, (state, action) => {
-    //   state.error = action.payload;
-    // });
   },
 });
 

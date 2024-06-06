@@ -1,47 +1,60 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../redux/slices/auth.slice";
-import { closeModal } from "../redux/slices/modal.slice";
+import { closeModal, openModal } from "../redux/slices/modal.slice";
+import supabase from "../supabaseClient";
 import Button from "./Button";
 import Signup from "./Signup";
 
 const LoginModal = () => {
-  const ERROR_MSG = "로그인에 실패하였습니다. 다시 시도해주세요.";
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
-  const isLoginOpen = useSelector((state) => state.auth.isLoginOpen);
 
   const isOpen = useSelector((state) => state.modal.isOpen);
 
-  const handleLogin = async () => {
-    // 1. 입력 안 했을 떄  2. 틀렸을 떄
+  const handleLogin = useCallback(async () => {
     if (!email || !password) {
-      alert("입력 ㄱㄱ");
+      dispatch(
+        openModal({
+          modalType: "alert",
+          modalProps: { message: "빈칸을 채워주세요" },
+        })
+      );
+      return;
     }
 
-    console.log(dispatch(signIn.rejected));
+    const { data: userData, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email)
+      .single();
 
-    // console.log(dispatch(signIn({ email, password })));
-    dispatch(signIn({ email, password }));
+    if (error) {
+      dispatch(
+        openModal({
+          modalType: "alert",
+          modalProps: { message: "오류가 발생했습니다." },
+        })
+      );
+      return;
+    }
 
-    // try {
-    //   // if (dispatch(signIn{ email })) {
-    //   //   throw new Error("로그인에 실패했습니다.");
-    //   // }
+    if (!userData || userData.password !== password) {
+      setLoginError("아이디나 비밀번호를 확인해주세요.");
+      return;
+    }
 
-    //   await dispatch(signIn({ email, password }));
-
-    // } catch (error) {
-    //   setLoginError(ERROR_MSG);
-
-    //   return;
-    // }
-
-    dispatch(closeModal());
-  };
+    dispatch(signIn({ email, password })).then((result) => {
+      if (result.error) {
+        setLoginError(result.error.message);
+      } else {
+        dispatch(closeModal());
+      }
+    });
+  }, [dispatch, email, password]);
 
   const handleSignUpOpen = () => {
     setIsSignUpOpen(true);
@@ -49,6 +62,10 @@ const LoginModal = () => {
 
   const handleSignUpClose = () => {
     setIsSignUpOpen(false);
+  };
+
+  const handleAlertClose = () => {
+    dispatch(closeModal());
   };
 
   return (
@@ -73,8 +90,8 @@ const LoginModal = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            {/* {loginError && <p>{loginError}</p>} */}
           </div>
+          {loginError && <p>{loginError}</p>}
           <div className="modal-btn-wrap">
             <Button color="#ff8c27" onClick={handleSignUpOpen}>
               회원가입
