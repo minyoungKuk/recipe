@@ -1,12 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import Button from "./Button";
+import React from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import Button from './Button';
 
 const StyledHeaderContainer = styled.header`
+  box-sizing: border-box;
   width: 100%;
-  height: 50px;
   background-color: #ffffff;
-  padding: 20px 40px;
+  padding: 0 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,28 +54,40 @@ const StyledButtonContainer = styled.div`
 `;
 
 const ButtonWrapperWithMargin = styled.div`
-  margin-right: 20px;
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Header = () => {
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
   const handleMyPageClick = () => {
-    console.log("마이페이지 클릭");
+    navigate('/mypage');
   };
 
   const handleLoginClick = () => {
-    console.log("로그인 클릭");
+    console.log('로그인 클릭');
   };
 
   return (
     <StyledHeaderContainer>
-      <StyledLogo src="/images/icon/Logo.png" alt="로고" />
+      <StyledLogo
+        src="/images/icon/Logo.png"
+        alt="로고"
+        onClick={handleLogoClick}
+      />
       <StyledButtonContainer>
         <StyledSearchInput type="text" placeholder="search.." />
         <StyledSearchIcon src="/images/icon/ic-search.png" alt="검색 아이콘" />
-        <Button color="#FE9F4D" size="small" onClick={handleMyPageClick}>
-          마이페이지
-        </Button>
         <ButtonWrapperWithMargin>
+          <Button color="#FE9F4D" size="small" onClick={handleMyPageClick}>
+            마이페이지
+          </Button>
           <Button color="#FE9234" size="small" onClick={handleLoginClick}>
             로그인
           </Button>
