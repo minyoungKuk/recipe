@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { signOut } from "../redux/slices/auth.slice";
+import { openModal } from "../redux/slices/modal.slice";
 import Button from "./Button";
 
 const StyledHeaderContainer = styled.header`
+  box-sizing: border-box;
   width: 100%;
-  height: 50px;
   background-color: #ffffff;
-  padding: 20px 40px;
+  padding: 0 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,31 +57,55 @@ const StyledButtonContainer = styled.div`
 `;
 
 const ButtonWrapperWithMargin = styled.div`
-  margin-right: 20px;
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
 `;
 
-const Header = () => {
-  const handleMyPageClick = () => {
-    console.log("마이페이지 클릭");
+const Header = ({ isLoggedIn, onLogout }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/");
   };
 
-  const handleLoginClick = () => {
-    console.log("로그인 클릭");
+  const handleMyPageClick = () => {
+    navigate("/mypage");
+  };
+
+  const handleLoginClick = useCallback(() => {
+    dispatch(openModal({ modalType: "login" }));
+  }, [dispatch]);
+
+  const handleLogoutClick = () => {
+    dispatch(signOut());
   };
 
   return (
     <StyledHeaderContainer>
-      <StyledLogo src="/images/icon/Logo.png" alt="로고" />
+      <StyledLogo
+        src="/images/icon/Logo.png"
+        alt="로고"
+        onClick={handleLogoClick}
+      />
       <StyledButtonContainer>
         <StyledSearchInput type="text" placeholder="search.." />
         <StyledSearchIcon src="/images/icon/ic-search.png" alt="검색 아이콘" />
-        <Button color="#FE9F4D" size="small" onClick={handleMyPageClick}>
-          마이페이지
-        </Button>
+
         <ButtonWrapperWithMargin>
-          <Button color="#FE9234" size="small" onClick={handleLoginClick}>
-            로그인
+          <Button color="#FE9F4D" size="small" onClick={handleMyPageClick}>
+            마이페이지
           </Button>
+          {isLoggedIn ? (
+            <Button color="#FE9234" size="small" onClick={handleLogoutClick}>
+              로그아웃
+            </Button>
+          ) : (
+            <Button color="#FE9234" size="small" onClick={handleLoginClick}>
+              로그인
+            </Button>
+          )}
         </ButtonWrapperWithMargin>
       </StyledButtonContainer>
     </StyledHeaderContainer>

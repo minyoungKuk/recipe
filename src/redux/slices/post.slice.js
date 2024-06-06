@@ -96,17 +96,14 @@ const postSlice = createSlice({
       // create
       .addCase(createPost.pending, (state) => {
         state.isPostLoading = true;
-        console.log(state.posts);
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.isPostLoading = false;
         state.posts = [action.payload, ...state.posts];
-        console.log(state.posts);
       })
       .addCase(createPost.rejected, (state, action) => {
         state.isPostLoading = false;
         state.errorMessage = action.error.message;
-        console.log(action.error.message);
       })
       // read
       .addCase(readPosts.pending, (state) => {
@@ -115,7 +112,6 @@ const postSlice = createSlice({
       .addCase(readPosts.fulfilled, (state, action) => {
         state.isPostLoading = false;
         state.posts = action.payload;
-        console.log(state.posts);
       })
       .addCase(readPosts.rejected, (state, action) => {
         state.isPostLoading = false;
