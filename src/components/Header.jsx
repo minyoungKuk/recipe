@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { signOut } from "../redux/slices/auth.slice";
 import { openModal } from "../redux/slices/modal.slice";
@@ -63,9 +64,14 @@ const ButtonWrapperWithMargin = styled.div`
 
 const Header = ({ isLoggedIn, onLogout }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/");
+  };
 
   const handleMyPageClick = () => {
-    console.log("마이페이지 클릭");
+    navigate("/mypage");
   };
 
   const handleLoginClick = useCallback(() => {
@@ -78,7 +84,11 @@ const Header = ({ isLoggedIn, onLogout }) => {
 
   return (
     <StyledHeaderContainer>
-      <StyledLogo src="/images/icon/Logo.png" alt="로고" />
+      <StyledLogo
+        src="/images/icon/Logo.png"
+        alt="로고"
+        onClick={handleLogoClick}
+      />
       <StyledButtonContainer>
         <StyledSearchInput type="text" placeholder="search.." />
         <StyledSearchIcon src="/images/icon/ic-search.png" alt="검색 아이콘" />

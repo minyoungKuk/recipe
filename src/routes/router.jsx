@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import SignUp from "../components/Signup";
 import DefaultLayout from "../layouts/DefaultLayout";
 import HomePage from "../pages/HomePage";
+// import { MyPage } from "../pages/MyPage";
 import PostDetailPage from "../pages/PostDetailPage";
 import PostEditPage from "../pages/PostEditPage";
 import PostWritingPage from "../pages/PostWritingPage";
@@ -26,10 +26,10 @@ const router = createBrowserRouter([
         path: "/edit",
         element: <PostEditPage />,
       },
-      {
-        path: "/signup",
-        element: <SignUp />,
-      },
+      // {
+      //   path: "/mypage",
+      //   element: <MyPage />,
+      // },
     ],
   },
 ]);
