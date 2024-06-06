@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    /* min-height: 100vh; */
   }
 
   label {
@@ -69,6 +69,27 @@ const GlobalStyle = createGlobalStyle`
   flex-direction: column;
 
   /* background-color: yellow; */
+  }
+
+  .modal {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    max-width: 360px;
+    width: 100%;
+
+    p {
+      padding-bottom: 40px;
+    }
+  }
+
+  .modal-box {
+    padding: 20px 0 40px 0;
+  }
+
+  .modal-btn-wrap {
+    display: flex;
+    justify-content: space-around;
   }
 `;
 

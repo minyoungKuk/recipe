@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const sizeStyle = {
-  small: '140px',
-  medium: '180px',
-  large: '100%',
+  small: "140px",
+  medium: "180px",
+  large: "100%",
 };
 
 const StyledButton = styled.button`
@@ -17,6 +17,7 @@ const StyledButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  /* margin: 0 20px; */
   font-size: 20px;
 
   &:hover {

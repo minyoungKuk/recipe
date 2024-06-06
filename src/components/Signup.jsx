@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { signUp } from "../redux/slices/auth.slice";
+import { openModal } from "../redux/slices/modal.slice";
+import supabase from "../supabaseClient";
 import Button from "./Button";
 
 const Form = styled.form`
@@ -28,14 +32,16 @@ const FormGroup = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+  justify-content: space-between;
 `;
 
-const Signup = () => {
+const SignUp = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [chkPassword, setChkPassword] = useState("");
   const emailRef = useRef(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (emailRef.current) {
@@ -44,22 +50,44 @@ const Signup = () => {
   }, []);
 
   const handleSignup = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault();
-    },
-    [email, nickname, password, chkPassword]
-  );
 
-  const handleLogin = useCallback(
-    (e) => {
-      e.preventDefault();
+      if (password !== chkPassword) {
+        dispatch(
+          openModal({
+            modalType: "alert",
+            modalProps: { message: "비밀번호가 일치하지 않습니다." },
+          })
+        );
+        return;
+      }
+
+      const { data: existingUser, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("email", email);
+      // .single();
+
+      if (existingUser && existingUser.length > 0) {
+        dispatch(
+          openModal({
+            modalType: "alert",
+            modalProps: { message: "이미 사용되는 이메일입니다." },
+          })
+        );
+        return;
+      }
+
+      dispatch(signUp({ email, password, nickname }));
+      onClose();
     },
-    [email, password]
+    [dispatch, email, nickname, password, chkPassword, onClose]
   );
 
   return (
     <div className="container">
-      <Form>
+      <Form onSubmit={handleSignup}>
         <FormGroup>
           <label htmlFor="email">아이디(이메일)</label>
           <input
@@ -97,7 +125,7 @@ const Signup = () => {
         </FormGroup>
 
         <ButtonContainer>
-          <Button color="#FE9234" size="large" onClick={handleLogin}>
+          <Button color="#FE9234" size="large" type="submit">
             회원가입
           </Button>
         </ButtonContainer>
@@ -106,4 +134,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignUp;

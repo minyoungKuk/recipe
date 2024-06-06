@@ -1,7 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import Button from './Button';
+import React, { useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { signOut } from "../redux/slices/auth.slice";
+import { openModal } from "../redux/slices/modal.slice";
+import Button from "./Button";
 
 const StyledHeaderContainer = styled.header`
   box-sizing: border-box;
@@ -59,19 +62,24 @@ const ButtonWrapperWithMargin = styled.div`
   justify-content: space-between;
 `;
 
-const Header = () => {
+const Header = ({ isLoggedIn, onLogout }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
-    navigate('/');
+    navigate("/");
   };
 
   const handleMyPageClick = () => {
-    navigate('/mypage');
+    navigate("/mypage");
   };
 
-  const handleLoginClick = () => {
-    console.log('로그인 클릭');
+  const handleLoginClick = useCallback(() => {
+    dispatch(openModal({ modalType: "login" }));
+  }, [dispatch]);
+
+  const handleLogoutClick = () => {
+    dispatch(signOut());
   };
 
   return (
@@ -84,13 +92,20 @@ const Header = () => {
       <StyledButtonContainer>
         <StyledSearchInput type="text" placeholder="search.." />
         <StyledSearchIcon src="/images/icon/ic-search.png" alt="검색 아이콘" />
+
         <ButtonWrapperWithMargin>
           <Button color="#FE9F4D" size="small" onClick={handleMyPageClick}>
             마이페이지
           </Button>
-          <Button color="#FE9234" size="small" onClick={handleLoginClick}>
-            로그인
-          </Button>
+          {isLoggedIn ? (
+            <Button color="#FE9234" size="small" onClick={handleLogoutClick}>
+              로그아웃
+            </Button>
+          ) : (
+            <Button color="#FE9234" size="small" onClick={handleLoginClick}>
+              로그인
+            </Button>
+          )}
         </ButtonWrapperWithMargin>
       </StyledButtonContainer>
     </StyledHeaderContainer>
