@@ -2,12 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import usePosts from "../hooks/usePosts";
+import useUser from "../hooks/useUser";
 import Button from "./Button";
 
 const RecipeForm = ({ children, editType }) => {
   const navigate = useNavigate();
   const { postId } = useParams();
 
+  const user = useUser();
+  console.log(user);
   const { posts, handleCreateNewPost, handleUpdatePost } = usePosts();
 
   const [title, setTitle] = useState("");
@@ -45,12 +48,14 @@ const RecipeForm = ({ children, editType }) => {
     }
   };
 
+  // recipe post database에 반영하는 함수
   const clickSubmitButton = () => {
     if (!title || !intro || !ingredient || !order || !imgPath) {
       alert("게시글 양식에 맞게 작성해주세요:(");
       return;
     }
 
+    // create
     if (editType === "create") {
       const newRecipeItem = {
         nickname: "닉네임",
@@ -64,6 +69,7 @@ const RecipeForm = ({ children, editType }) => {
 
       handleCreateNewPost(newRecipeItem);
     } else {
+      // update
       const newRecipeItem = {
         id: postId,
         nickname: "닉네임",

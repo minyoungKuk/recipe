@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/Button";
 import ListCard from "../components/ListCard";
 import usePosts from "../hooks/usePosts";
+import { openModal } from "../redux/slices/modal.slice";
 
 const MainContainer = styled.main`
   max-width: 1080px;
@@ -11,6 +13,7 @@ const MainContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 `;
 
 const ImagePlaceholder = styled.div`
@@ -64,17 +67,28 @@ const StRecipeList = styled.ul`
   display: flex;
   flex-wrap: wrap;
   list-style: none;
+  gap: 25px;
 
   margin: 0 auto;
   padding: 20px 40px;
-  justify-content: space-between;
 `;
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
+  // 로그인 상태 일 시 작성 페이지로 이동
   const goToPostWritingPage = () => {
-    navigate("/write");
+    if (isLoggedIn) navigate("/write");
+    else {
+      dispatch(
+        openModal({
+          modalType: "alert",
+          modalProps: { message: "로그인 후 이용해 주세요" },
+        })
+      );
+    }
   };
 
   const [activeTab, setActiveTab] = useState("popular");
