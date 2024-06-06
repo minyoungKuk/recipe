@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { signUp } from "../redux/slices/auth.slice";
 import { openModal } from "../redux/slices/modal.slice";
+import supabase from "../supabaseClient";
 import Button from "./Button";
 
 const Form = styled.form`
@@ -42,15 +43,6 @@ const SignUp = () => {
   const emailRef = useRef(null);
   const dispatch = useDispatch();
 
-  const handleClickButton = useCallback(() => {
-    dispatch(
-      openModal({
-        modalType: "alert",
-        modalProps: { message: "테스트 내용 . . . .ㅎ" },
-      })
-    );
-  }, [dispatch]);
-
   useEffect(() => {
     if (emailRef.current) {
       emailRef.current.focus();
@@ -58,7 +50,7 @@ const SignUp = () => {
   }, []);
 
   const handleSignup = useCallback(
-    (e) => {
+    async (e) => {
       e.preventDefault();
 
       if (password !== chkPassword) {
@@ -68,11 +60,26 @@ const SignUp = () => {
             modalProps: { message: "비밀번호가 일치하지 않습니다." },
           })
         );
-
         return;
       }
 
-      dispatch(signUp({ email, nickname, password }));
+      const { data: existingUser, error } = await supabase
+        .from("users")
+        .select()
+        .eq("email", email)
+        .single();
+
+      if (existingUser) {
+        dispatch(
+          openModal({
+            modalType: "alert",
+            modalProps: { message: "이미 사용되는 이메일입니다." },
+          })
+        );
+        return;
+      }
+
+      dispatch(signUp({ email, password, nickname }));
     },
     [dispatch, email, nickname, password, chkPassword]
   );
@@ -117,10 +124,9 @@ const SignUp = () => {
         </FormGroup>
 
         <ButtonContainer>
-          <Button color="#FE9234" onClick={handleSignup}>
+          <Button color="#FE9234" size="large" onClick={handleSignup}>
             회원가입
           </Button>
-          <Button onClick={handleClickButton}>dd</Button>
         </ButtonContainer>
       </Form>
     </div>

@@ -4,30 +4,58 @@ import supabase from "../../supabaseClient";
 const initialState = {
   user: null,
   error: null,
+  isLoggedIn: false,
 };
+
 export const signUp = createAsyncThunk(
   "auth/signUp",
-  async ({ email, nickname, password }, thunkAPI) => {
+  async ({ email, password, nickname }, thunkAPI) => {
     try {
       const { user, error } = await supabase.auth.signUp({
         email,
         password,
       });
 
+      // TODO: sign up error new error로 다시 처리하기.
       if (error) {
         throw error;
       }
 
       const { data, error: insertError } = await supabase
-        .from("public.users")
-        .insert([{ id: user.id, email, nickname }]);
+        .from("users")
+        .insert({ email, nickname, password });
 
+      // TODO: sign up error new error로 다시 처리하기.
       if (insertError) {
-        throw insertError;
+        throw Error;
       }
 
       return user;
     } catch (error) {
+      console.log("error ", error);
+
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const signIn = createAsyncThunk(
+  "auth/signIn",
+  async ({ email, password }, thunkAPI) => {
+    try {
+      const { user, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      console.log("error", error);
+      if (error) {
+        throw error;
+      }
+
+      return user;
+    } catch (error) {
+      console.log("error", error);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
@@ -40,10 +68,20 @@ const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
       state.error = null;
+      state.isLoggedIn = true;
     },
     setError: (state, action) => {
       state.user = null;
       state.error = action.payload;
+      state.isLoggedIn = false;
+    },
+    logout: (state) => {
+      state.user = null;
+      state.error = null;
+      state.isLoggedIn = false;
+    },
+    setIsLoggedIn: (state, action) => {
+      state.isLoggedIn = action.payload;
     },
   },
 
@@ -52,13 +90,25 @@ const authSlice = createSlice({
       .addCase(signUp.fulfilled, (state, action) => {
         state.user = action.payload;
         state.error = null;
+        state.isLoggedIn = true;
       })
       .addCase(signUp.rejected, (state, action) => {
         state.user = null;
         state.error = action.payload;
+        state.isLoggedIn = false;
+      })
+      .addCase(signIn.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.error = null;
+        state.isLoggedIn = true;
+      })
+      .addCase(signIn.rejected, (state, action) => {
+        state.user = null;
+        state.error = action.payload;
+        state.isLoggedIn = false;
       });
   },
 });
 
-export const { setUser, setError } = authSlice.actions;
+export const { setUser, setError, logout } = authSlice.actions;
 export default authSlice.reducer;

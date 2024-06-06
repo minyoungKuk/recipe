@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { logout } from "../redux/slices/auth.slice";
+import { openModal } from "../redux/slices/modal.slice";
 import Button from "./Button";
 
 const StyledHeaderContainer = styled.header`
@@ -59,13 +62,20 @@ const ButtonWrapperWithMargin = styled.div`
 `;
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
   const handleMyPageClick = () => {
     console.log("마이페이지 클릭");
   };
 
-  const handleLoginClick = () => {
-    console.log("로그인 클릭");
-  };
+  const handleLoginClick = useCallback(() => {
+    dispatch(openModal({ modalType: "login" }));
+  }, [dispatch]);
+
+  const handleLogoutClick = useCallback(() => {
+    dispatch(logout());
+  }, [dispatch]);
 
   return (
     <StyledHeaderContainer>
@@ -78,9 +88,15 @@ const Header = () => {
           <Button color="#FE9F4D" size="small" onClick={handleMyPageClick}>
             마이페이지
           </Button>
-          <Button color="#FE9234" size="small" onClick={handleLoginClick}>
-            로그인
-          </Button>
+          {isLoggedIn ? (
+            <Button color="#FE9234" size="small" onClick={handleLogoutClick}>
+              로그아웃
+            </Button>
+          ) : (
+            <Button color="#FE9234" size="small" onClick={handleLoginClick}>
+              로그인
+            </Button>
+          )}
         </ButtonWrapperWithMargin>
       </StyledButtonContainer>
     </StyledHeaderContainer>

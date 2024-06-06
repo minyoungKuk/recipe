@@ -82,6 +82,15 @@ const GlobalStyle = createGlobalStyle`
       padding-bottom: 40px;
     }
   }
+
+  .modal-box {
+    padding: 20px 0 40px 0;
+  }
+
+  .modal-btn-wrap {
+    display: flex;
+    justify-content: space-around;
+  }
 `;
 
 export default GlobalStyle;
