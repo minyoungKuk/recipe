@@ -1,8 +1,9 @@
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { signOut } from "../redux/slices/auth.slice";
+
+import { setIsLoginOpen, signOut } from "../redux/slices/auth.slice";
 import { openModal } from "../redux/slices/modal.slice";
 import Button from "./Button";
 
@@ -65,6 +66,7 @@ const ButtonWrapperWithMargin = styled.div`
 const Header = ({ isLoggedIn, onLogout }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLoginOpen = useSelector((state) => state.auth.isLoginOpen);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -76,6 +78,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
 
   const handleLoginClick = useCallback(() => {
     dispatch(openModal({ modalType: "login" }));
+    dispatch(setIsLoginOpen(true));
   }, [dispatch]);
 
   const handleLogoutClick = () => {

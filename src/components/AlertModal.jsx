@@ -11,13 +11,11 @@ const AlertModal = ({ message }) => {
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <p> {message} </p>
-        <Button color="#ff851b" size="large" onClick={handleClose}>
-          확인
-        </Button>
-      </div>
+    <div className="modal-content">
+      <p> {message} </p>
+      <Button color="#ff851b" size="large" onClick={handleClose}>
+        확인
+      </Button>
     </div>
   );
 };

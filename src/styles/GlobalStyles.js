@@ -80,6 +80,7 @@ const GlobalStyle = createGlobalStyle`
     border-radius: 8px;
     max-width: 360px;
     width: 100%;
+    position: relative;
 
     p {
       padding-bottom: 40px;
