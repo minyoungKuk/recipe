@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { signUp } from "../redux/slices/auth.slice";
-import { openModal } from "../redux/slices/modal.slice";
+import { closeModal, openModal } from "../redux/slices/modal.slice";
 import supabase from "../supabaseClient";
 import Button from "./Button";
 
@@ -67,7 +67,6 @@ const SignUp = ({ onClose }) => {
         .from("users")
         .select("*")
         .eq("email", email);
-      // .single();
 
       if (existingUser && existingUser.length > 0) {
         dispatch(
@@ -79,10 +78,13 @@ const SignUp = ({ onClose }) => {
         return;
       }
 
-      dispatch(signUp({ email, password, nickname }));
-      onClose();
+      dispatch(signUp({ email, password, nickname })).then((result) => {
+        if (!result.error) {
+          dispatch(closeModal());
+        }
+      });
     },
-    [dispatch, email, nickname, password, chkPassword, onClose]
+    [dispatch, email, nickname, password, chkPassword]
   );
 
   return (

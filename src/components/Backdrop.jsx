@@ -7,14 +7,14 @@ const BackdropWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const Backdrop = ({ children, onClick }) => {
-  return <BackdropWrapper onClick={onClick}>{children}</BackdropWrapper>;
+  return <BackdropWrapper onClick={onclick}>{children}</BackdropWrapper>;
 };
 
 export default Backdrop;
