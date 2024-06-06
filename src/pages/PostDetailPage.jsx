@@ -1,65 +1,68 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import BackButton from "../components/BackButton";
 import Button from "../components/Button";
+import usePosts from "../hooks/usePosts";
 
 const PostDetailPage = () => {
+  const navigate = useNavigate();
   const { postId } = useParams();
 
-  const dispatch = useDispatch();
-  // const posts = useSelector((state) => state.posts.posts);
-  // console.log(posts);
-  // const detailPost = posts.find((post) => post.id === postId);
-  // console.log(detailPost);
-  // const {
-  //   created_at,
-  //   nickname,
-  //   recipe_title,
-  //   recipe_intro,
-  //   recipe_ingredient,
-  //   recipe_order,
-  //   total_likes,
-  //   recipe_image_url,
-  // } = detailPost;
+  const { posts, handleDeletePost } = usePosts();
 
-  const recipe_title = "떡볶이";
-  const total_likes = 7;
-  const nickname = "르탄이";
-  const created_at = "2024.6.3";
-  const recipe_image_url =
-    "https://recipe1.ezmember.co.kr/cache/recipe/2023/06/29/a1a5a04e39879f1033ae07367dfee5251.jpg";
-  const recipe_intro = "떡볶이 소개입니다!!! 맛있는 떡볶이!!";
-  const recipe_ingredient = "떡, 어묵, 고추장";
-  const recipe_order = `1. 떡 불리기 2. 끓이기`;
+  const detailPost = posts.find((post) => post.id === postId);
+  if (!detailPost) return null;
+
+  const {
+    id,
+    created_at: date,
+    nickname,
+    recipe_title: title,
+    recipe_intro: intro,
+    recipe_ingredient: ingredient,
+    recipe_order: order,
+    total_likes: likes,
+    recipe_image_url: imageUrl,
+  } = detailPost;
+
+  const clickDeleteButton = () => {
+    handleDeletePost(postId);
+    navigate("/");
+  };
+
+  const goToEditPage = () => {
+    navigate(`/edit/${postId}`);
+  };
 
   return (
     <main className="main">
       <BackButton />
       <div className="wrapper">
         <TitleDiv>
-          <h1>{recipe_title}</h1>
-          <span>{total_likes} ❤️</span>
+          <h1>{title}</h1>
+          <span>{likes} ❤️</span>
         </TitleDiv>
-        <WriterSpan>
-          by {nickname}. {created_at}
-        </WriterSpan>
-        <FoodImage src={recipe_image_url} />
+        <WriterSpan>{`by ${nickname}. ${date.slice(0, 10)}`}</WriterSpan>
+        <FoodImage src={imageUrl} />
         <Part>
-          <b id="intro">{recipe_intro}</b>
+          <b id="intro">{intro}</b>
         </Part>
         <Part>
           <b>레시피 재료</b>
-          <p>{recipe_ingredient}</p>
+          <p>{ingredient}</p>
         </Part>
         <Part>
           <b>레시피 순서</b>
-          <p>{recipe_order}</p>
+          <p>{order}</p>
         </Part>
         <EditButtonDiv>
-          <Button color="#FE9F4D">수정</Button>
-          <Button color="#FE9F4D">삭제</Button>
+          <Button color="#FE9F4D" onClick={goToEditPage}>
+            수정
+          </Button>
+          <Button color="#FE9F4D" onClick={clickDeleteButton}>
+            삭제
+          </Button>
         </EditButtonDiv>
       </div>
     </main>
@@ -96,6 +99,7 @@ const WriterSpan = styled.span`
   border-bottom: 3px solid #fe9234;
   padding-bottom: 10px;
   padding-right: 5px;
+  word-spacing: 4px;
 `;
 
 const FoodImage = styled.img`

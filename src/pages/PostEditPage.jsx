@@ -6,7 +6,7 @@ const PostWritingPage = () => {
   return (
     <main className="main">
       <BackButton />
-      <RecipeForm>수정</RecipeForm>
+      <RecipeForm editType="update">수정</RecipeForm>
     </main>
   );
 };

@@ -6,7 +6,7 @@ const PostWritingPage = () => {
   return (
     <main className="main">
       <BackButton />
-      <RecipeForm>작성 완료</RecipeForm>
+      <RecipeForm editType="create">작성 완료</RecipeForm>
     </main>
   );
 };

@@ -1,10 +1,35 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import usePosts from "../hooks/usePosts";
 import Button from "./Button";
 
-const RecipeForm = ({ children }) => {
+const RecipeForm = ({ children, editType }) => {
+  const navigate = useNavigate();
+  const { postId } = useParams();
+
+  const { posts, handleCreateNewPost, handleUpdatePost } = usePosts();
+
+  const [title, setTitle] = useState("");
+  const [intro, setIntro] = useState("");
+  const [ingredient, setIngredient] = useState("");
+  const [order, setOrder] = useState("");
   const [imgPath, setImgPath] = useState("");
+
   const imgRef = useRef(null);
+
+  useEffect(() => {
+    if (editType === "update" && postId) {
+      const editPost = posts.find((post) => post.id === postId);
+      if (editPost) {
+        setTitle(editPost.recipe_title);
+        setIntro(editPost.recipe_intro);
+        setIngredient(editPost.recipe_ingredient);
+        setOrder(editPost.recipe_order);
+        setImgPath(editPost.recipe_image_url);
+      }
+    }
+  }, [editType, postId, posts]);
 
   // 이미지 파일 업로드 시 나타나는 이미지 미리보기
   const showImage = () => {
@@ -13,10 +38,47 @@ const RecipeForm = ({ children }) => {
 
       const reader = new FileReader();
       reader.readAsDataURL(img);
+      setImgPath(reader.result);
       reader.onload = () => {
-        setImgPath(reader.result);
+        setImgPath(String(reader.result));
       };
     }
+  };
+
+  const clickSubmitButton = () => {
+    if (!title || !intro || !ingredient || !order || !imgPath) {
+      alert("게시글 양식에 맞게 작성해주세요:(");
+      return;
+    }
+
+    if (editType === "create") {
+      const newRecipeItem = {
+        nickname: "닉네임",
+        recipe_title: title,
+        recipe_intro: intro,
+        recipe_ingredient: ingredient,
+        recipe_order: order,
+        recipe_image_url: imgPath,
+        total_likes: 0,
+      };
+
+      handleCreateNewPost(newRecipeItem);
+    } else {
+      const newRecipeItem = {
+        id: postId,
+        nickname: "닉네임",
+        recipe_title: title,
+        recipe_intro: intro,
+        recipe_ingredient: ingredient,
+        recipe_order: order,
+        recipe_image_url: imgPath,
+        total_likes: 0,
+      };
+
+      handleUpdatePost(newRecipeItem);
+    }
+
+    navigate("/");
   };
 
   return (
@@ -27,6 +89,8 @@ const RecipeForm = ({ children }) => {
           id="title"
           type="text"
           placeholder="레시피의 이름을 적어주세요"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </Part>
       <Part>
@@ -35,15 +99,27 @@ const RecipeForm = ({ children }) => {
           id="intro"
           type="text"
           placeholder="레시피에 대해 간단하게 소개해보세요"
+          value={intro}
+          onChange={(e) => setIntro(e.target.value)}
         />
       </Part>
       <Part>
         <label htmlFor="ingredient">레시피 재료</label>
-        <textarea id="ingredient" placeholder="레시피의 재료를 적어주세요" />
+        <textarea
+          id="ingredient"
+          placeholder="레시피의 재료를 적어주세요"
+          value={ingredient}
+          onChange={(e) => setIngredient(e.target.value)}
+        />
       </Part>
       <Part>
         <label htmlFor="order">레시피 순서</label>
-        <textarea id="order" placeholder="레시피의 순서를 적어주세요" />
+        <textarea
+          id="order"
+          placeholder="레시피의 순서를 적어주세요"
+          value={order}
+          onChange={(e) => setOrder(e.target.value)}
+        />
       </Part>
       <Part>
         <label htmlFor="image">레시피 사진</label>
@@ -59,7 +135,7 @@ const RecipeForm = ({ children }) => {
         />
       </Part>
       <ButtonDiv>
-        <Button id="submit-button" color="#FF9234">
+        <Button id="submit-button" color="#FF9234" onClick={clickSubmitButton}>
           {children}
         </Button>
       </ButtonDiv>

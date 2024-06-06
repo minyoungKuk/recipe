@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../components/Button";
 import ListCard from "../components/ListCard";
+import usePosts from "../hooks/usePosts";
 
 const MainContainer = styled.main`
   max-width: 1080px;
@@ -58,60 +59,48 @@ const ButtonWrapper = styled.div`
   justify-content: flex-end;
 `;
 
+const StRecipeList = styled.ul`
+  max-width: 1080px;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+
+  margin: 0 auto;
+  padding: 20px 40px;
+  justify-content: space-between;
+`;
+
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const goToPostWritingPage = () => navigate("/write");
+  const goToPostWritingPage = () => {
+    navigate("/write");
+  };
 
   const [activeTab, setActiveTab] = useState("popular");
 
-  const popularRecipes = [
-    {
-      image: "",
-      name: "떡볶이",
-      description: "떡볶이 만드는 방법입니다.",
-    },
-    {
-      image: "",
-      name: "타코야끼",
-      description: "타코야끼 만드는 방법입니다.",
-    },
-    {
-      image: "",
-      name: "피자",
-      description: "피자 만드는 방법입니다.",
-    },
-    {
-      image: "",
-      name: "꿀떡",
-      description: "꿀떡 만드는 방법입니다.",
-    },
-  ];
-
-  const latestRecipes = [
-    {
-      image: "",
-      name: "타코야끼",
-      description: "타코야끼 만드는 방법입니다.",
-    },
-  ];
-
-  const favoriteRecipes = [
-    {
-      image: "",
-      name: "떡볶이",
-      description: "떡볶이 만드는 방법입니다.",
-    },
-  ];
-
   const renderCards = () => {
+    const { posts } = usePosts();
+    if (!posts) return null;
+
     switch (activeTab) {
-      case "popular":
-        return <ListCard recipes={popularRecipes} />;
-      case "latest":
-        return <ListCard recipes={latestRecipes} />;
-      case "favorites":
-        return <ListCard recipes={favoriteRecipes} />;
+      case "popular": // 인기순
+        const sortedPostsByPopular = [...posts].sort(
+          (a, b) => b.total_likes - a.total_likes
+        );
+        return sortedPostsByPopular.map((post) => (
+          <ListCard key={post.id} post={post} />
+        ));
+      case "latest": // 최신순
+        const sortedPostsBtDate = [...posts].sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+        console.log(sortedPostsBtDate);
+        return sortedPostsBtDate.map((post) => (
+          <ListCard key={post.id} post={post} />
+        ));
+      case "favorites": // 내가 좋아요한 레시피
+        return posts.map((post) => <ListCard key={post.id} post={post} />);
       default:
         return null;
     }
@@ -141,7 +130,7 @@ const HomePage = () => {
             active={activeTab === "favorites"}
             onClick={() => setActiveTab("favorites")}
           >
-            내가 찜한 목록
+            내가 좋아요한 레시피
           </Tab>
         </Tabs>
         <ButtonWrapper>
@@ -150,7 +139,7 @@ const HomePage = () => {
           </Button>
         </ButtonWrapper>
       </HeaderSection>
-      {renderCards()}
+      <StRecipeList>{renderCards()}</StRecipeList>
     </MainContainer>
   );
 };
