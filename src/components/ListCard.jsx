@@ -1,26 +1,26 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
-const StRecipeList = styled.ul`
-  max-width: 1080px;
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  border: 1px solid black;
-  margin: 0 auto;
-  padding: 20px 40px;
-  justify-content: space-between;
-`;
 
 const StRecipeItem = styled.li`
   width: calc(33.33% - 20px);
   margin-bottom: 20px;
-  border: 1px solid black;
+  border: 1px solid #ff9234;
   border-radius: 10px;
   height: 480px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+
+  transition: all 0.5s;
+
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+  }
 `;
 
 const StRecipeImage = styled.div`
@@ -28,7 +28,7 @@ const StRecipeImage = styled.div`
   height: 0;
   padding-bottom: 80%;
   background-color: #eaeaea;
-  background-image: url("../public/images/icon/ic-back.png"); //이미지주소
+  background-image: url(${(props) => props.url}); //이미지주소
   background-size: cover;
   border-radius: 12px;
   margin-top: 20px;
@@ -63,55 +63,38 @@ const StNickname = styled.div`
 `;
 const StCount = styled.div`
   padding-right: 30px;
+
+  span {
+    color: red;
+  }
 `;
 
-export default function ListCard() {
+export default function ListCard({ post }) {
+  const navigate = useNavigate();
+  const {
+    id,
+    recipe_title: title,
+    recipe_intro: intro,
+    nickname,
+    total_likes: likes,
+    recipe_image_url: imgUrl,
+  } = post;
+
+  const goToDetailPage = () => navigate(`/post/${id}`);
+
   return (
-    <StRecipeList>
-      <StRecipeItem>
-        <StRecipeImage />
-        <StRecipeName>레시피 이름</StRecipeName>
-        <StRecipeDescriptionWrapper>
-          <StRecipeDescription>레시피 설명</StRecipeDescription>
-        </StRecipeDescriptionWrapper>
-        <StAdditionalInfoWrapper>
-          <StNickname>닉네임입니다</StNickname>
-          <StCount>count ♥</StCount>
-        </StAdditionalInfoWrapper>
-      </StRecipeItem>
-      <StRecipeItem>
-        <StRecipeImage />
-        <StRecipeName>레시피 이름</StRecipeName>
-        <StRecipeDescriptionWrapper>
-          <StRecipeDescription>레시피 설명</StRecipeDescription>
-        </StRecipeDescriptionWrapper>
-        <StAdditionalInfoWrapper>
-          <StNickname>닉네임입니다</StNickname>
-          <StCount>count ♥</StCount>
-        </StAdditionalInfoWrapper>
-      </StRecipeItem>
-      <StRecipeItem>
-        <StRecipeImage />
-        <StRecipeName>레시피 이름</StRecipeName>
-        <StRecipeDescriptionWrapper>
-          <StRecipeDescription>레시피 설명</StRecipeDescription>
-        </StRecipeDescriptionWrapper>
-        <StAdditionalInfoWrapper>
-          <StNickname>닉네임입니다</StNickname>
-          <StCount>count ♥</StCount>
-        </StAdditionalInfoWrapper>
-      </StRecipeItem>
-      <StRecipeItem>
-        <StRecipeImage />
-        <StRecipeName>레시피 이름</StRecipeName>
-        <StRecipeDescriptionWrapper>
-          <StRecipeDescription>레시피 설명</StRecipeDescription>
-        </StRecipeDescriptionWrapper>
-        <StAdditionalInfoWrapper>
-          <StNickname>닉네임입니다</StNickname>
-          <StCount>count ♥</StCount>
-        </StAdditionalInfoWrapper>
-      </StRecipeItem>
-    </StRecipeList>
+    <StRecipeItem onClick={goToDetailPage}>
+      <StRecipeImage url={imgUrl} />
+      <StRecipeName>{title}</StRecipeName>
+      <StRecipeDescriptionWrapper>
+        <StRecipeDescription>{intro}</StRecipeDescription>
+      </StRecipeDescriptionWrapper>
+      <StAdditionalInfoWrapper>
+        <StNickname>{nickname}</StNickname>
+        <StCount>
+          {likes} <span>♥</span>
+        </StCount>
+      </StAdditionalInfoWrapper>
+    </StRecipeItem>
   );
 }
