@@ -78,7 +78,7 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  // 로그인 상태 일 시 작성 페이지로 이동
+  // 로그인 상태일 시 작성 페이지로 이동
   const goToPostWritingPage = () => {
     if (isLoggedIn) navigate("/write");
     else {

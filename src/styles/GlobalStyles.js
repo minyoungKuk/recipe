@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -53,22 +53,25 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .main {
-  width: 1080px;
-  margin: auto;
+    width: 1080px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
 
-  display: flex;
-  justify-content: center;
-
-  /* background-color: skyblue; */
+    /* background-color: skyblue; */
   }
 
   .wrapper {
-  width: 720px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
+    width: 720px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
 
-  /* background-color: yellow; */
+    /* background-color: yellow; */
+  }
+
+  .slick-slide:focus {
+    outline: none;
   }
 
   .modal {
