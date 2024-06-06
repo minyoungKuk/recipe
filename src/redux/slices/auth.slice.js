@@ -5,8 +5,10 @@ const initialState = {
   user: null,
   error: null,
   isLoggedIn: false,
+  isLoginOpen: false,
 };
 
+console.log(initialState.isLoginOpen);
 export const signUp = createAsyncThunk(
   "auth/signUp",
   async ({ email, password, nickname }, thunkAPI) => {
@@ -50,19 +52,15 @@ export const signIn = createAsyncThunk(
         password,
       });
 
-      console.log("error", error);
       if (error) {
-        throw error;
+        throw new Error("로그인에 실패하였습니다. 다시 시도해주세요.");
       }
-
-      // return user;
+      return user;
     } catch (error) {
-      console.log("error", error);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
-
 export const signOut = createAsyncThunk("auth/signOut", async (_, thunkAPI) => {
   try {
     await supabase.auth.signOut();
@@ -92,6 +90,12 @@ const authSlice = createSlice({
       state.error = null;
       state.isLoggedIn = false;
     },
+    setIsLoginOpen: (state, action) => {
+      state.isLoginOpen = action.payload;
+    },
+    setShowError: (state, action) => {
+      state.showError = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -115,6 +119,7 @@ const authSlice = createSlice({
         state.user = null;
         state.error = action.payload;
         state.isLoggedIn = false;
+        alert(action.payload);
       });
     // .addCase(signOut.fulfilled, (state) => {
     //   state.user = null;
@@ -129,5 +134,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUser, setError, logout } = authSlice.actions;
+export const { setUser, setError, logout, setIsLoginOpen } = authSlice.actions;
 export default authSlice.reducer;

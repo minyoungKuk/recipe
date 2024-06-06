@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import Button from '../components/Button';
-import ListCard from '../components/ListCard';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Button from "../components/Button";
+import ListCard from "../components/ListCard";
 
 const MainContainer = styled.main`
   max-width: 1080px;
@@ -45,8 +45,8 @@ const Tab = styled.button`
   cursor: pointer;
   background: none;
   border: none;
-  border-bottom: ${(props) => (props.active ? '2px solid #FE9F4D' : 'none')};
-  color: ${(props) => (props.active ? '#FE9F4D' : '#000')};
+  border-bottom: ${(props) => (props.active ? "2px solid #FE9F4D" : "none")};
+  color: ${(props) => (props.active ? "#FE9F4D" : "#000")};
 
   &:focus {
     outline: none;
@@ -61,56 +61,56 @@ const ButtonWrapper = styled.div`
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const goToPostWritingPage = () => navigate('/write');
+  const goToPostWritingPage = () => navigate("/write");
 
-  const [activeTab, setActiveTab] = useState('popular');
+  const [activeTab, setActiveTab] = useState("popular");
 
   const popularRecipes = [
     {
-      image: '',
-      name: '떡볶이',
-      description: '떡볶이 만드는 방법입니다.',
+      image: "",
+      name: "떡볶이",
+      description: "떡볶이 만드는 방법입니다.",
     },
     {
-      image: '',
-      name: '타코야끼',
-      description: '타코야끼 만드는 방법입니다.',
+      image: "",
+      name: "타코야끼",
+      description: "타코야끼 만드는 방법입니다.",
     },
     {
-      image: '',
-      name: '피자',
-      description: '피자 만드는 방법입니다.',
+      image: "",
+      name: "피자",
+      description: "피자 만드는 방법입니다.",
     },
     {
-      image: '',
-      name: '꿀떡',
-      description: '꿀떡 만드는 방법입니다.',
+      image: "",
+      name: "꿀떡",
+      description: "꿀떡 만드는 방법입니다.",
     },
   ];
 
   const latestRecipes = [
     {
-      image: '',
-      name: '타코야끼',
-      description: '타코야끼 만드는 방법입니다.',
+      image: "",
+      name: "타코야끼",
+      description: "타코야끼 만드는 방법입니다.",
     },
   ];
 
   const favoriteRecipes = [
     {
-      image: '',
-      name: '떡볶이',
-      description: '떡볶이 만드는 방법입니다.',
+      image: "",
+      name: "떡볶이",
+      description: "떡볶이 만드는 방법입니다.",
     },
   ];
 
   const renderCards = () => {
     switch (activeTab) {
-      case 'popular':
+      case "popular":
         return <ListCard recipes={popularRecipes} />;
-      case 'latest':
+      case "latest":
         return <ListCard recipes={latestRecipes} />;
-      case 'favorites':
+      case "favorites":
         return <ListCard recipes={favoriteRecipes} />;
       default:
         return null;
@@ -126,20 +126,20 @@ const HomePage = () => {
       <HeaderSection>
         <Tabs>
           <Tab
-            active={activeTab === 'popular'}
-            onClick={() => setActiveTab('popular')}
+            active={activeTab === "popular"}
+            onClick={() => setActiveTab("popular")}
           >
             인기순
           </Tab>
           <Tab
-            active={activeTab === 'latest'}
-            onClick={() => setActiveTab('latest')}
+            active={activeTab === "latest"}
+            onClick={() => setActiveTab("latest")}
           >
             최신순
           </Tab>
           <Tab
-            active={activeTab === 'favorites'}
-            onClick={() => setActiveTab('favorites')}
+            active={activeTab === "favorites"}
+            onClick={() => setActiveTab("favorites")}
           >
             내가 찜한 목록
           </Tab>
