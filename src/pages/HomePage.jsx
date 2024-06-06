@@ -1,42 +1,22 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import Button from "../components/Button";
-import ListCard from "../components/ListCard";
-import usePosts from "../hooks/usePosts";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import Button from '../components/Button';
+import ListCard from '../components/ListCard';
+import usePosts from '../hooks/usePosts';
+import ImageSlider from '../components/Slider';
 
 const MainContainer = styled.main`
   max-width: 1080px;
   margin: auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const ImagePlaceholder = styled.div`
-  width: 100%;
-  height: 300px;
-  background-color: #ececec;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-  color: black;
-  text-align: center;
-`;
-
-const HeaderSection = styled.div`
-  width: 100%;
-  display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
 `;
 
 const Tabs = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 const Tab = styled.button`
@@ -46,8 +26,8 @@ const Tab = styled.button`
   cursor: pointer;
   background: none;
   border: none;
-  border-bottom: ${(props) => (props.active ? "2px solid #FE9F4D" : "none")};
-  color: ${(props) => (props.active ? "#FE9F4D" : "#000")};
+  border-bottom: ${(props) => (props.$active ? '2px solid #FE9F4D' : 'none')};
+  color: ${(props) => (props.$active ? '#FE9F4D' : '#000')};
 
   &:focus {
     outline: none;
@@ -59,47 +39,49 @@ const ButtonWrapper = styled.div`
   justify-content: flex-end;
 `;
 
-const StRecipeList = styled.ul`
-  max-width: 1080px;
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
+const ImageSliderWrapper = styled.div`
+  width: 1080px;
+`;
 
-  margin: 0 auto;
-  padding: 20px 40px;
+const HeaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  padding: 10px 0;
+  margin: 0 10px;
 `;
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const goToPostWritingPage = () => navigate('/write');
+  const [activeTab, setActiveTab] = useState('popular');
 
-  const goToPostWritingPage = () => {
-    navigate("/write");
-  };
-
-  const [activeTab, setActiveTab] = useState("popular");
+  const images = [
+    'public/images/image1.jpg',
+    'public/images/image2.jpg',
+    'public/images/image3.jpg',
+  ];
 
   const renderCards = () => {
     const { posts } = usePosts();
     if (!posts) return null;
 
     switch (activeTab) {
-      case "popular": // 인기순
+      case 'popular':
         const sortedPostsByPopular = [...posts].sort(
           (a, b) => b.total_likes - a.total_likes
         );
         return sortedPostsByPopular.map((post) => (
           <ListCard key={post.id} post={post} />
         ));
-      case "latest": // 최신순
-        const sortedPostsBtDate = [...posts].sort(
+      case 'latest':
+        const sortedPostsByDate = [...posts].sort(
           (a, b) => new Date(b.created_at) - new Date(a.created_at)
         );
-        console.log(sortedPostsBtDate);
-        return sortedPostsBtDate.map((post) => (
+        return sortedPostsByDate.map((post) => (
           <ListCard key={post.id} post={post} />
         ));
-      case "favorites": // 내가 좋아요한 레시피
+      case 'favorites':
         return posts.map((post) => <ListCard key={post.id} post={post} />);
       default:
         return null;
@@ -108,38 +90,39 @@ const HomePage = () => {
 
   return (
     <MainContainer>
-      <ImagePlaceholder>
-        <div>오늘 뭐 먹지?</div>
-        <div>레시피를 공유해 보세요!!</div>
-      </ImagePlaceholder>
-      <HeaderSection>
-        <Tabs>
-          <Tab
-            active={activeTab === "popular"}
-            onClick={() => setActiveTab("popular")}
-          >
-            인기순
-          </Tab>
-          <Tab
-            active={activeTab === "latest"}
-            onClick={() => setActiveTab("latest")}
-          >
-            최신순
-          </Tab>
-          <Tab
-            active={activeTab === "favorites"}
-            onClick={() => setActiveTab("favorites")}
-          >
-            내가 좋아요한 레시피
-          </Tab>
-        </Tabs>
-        <ButtonWrapper>
-          <Button color="#FE9F4D" size="small" onClick={goToPostWritingPage}>
-            레시피 작성
-          </Button>
-        </ButtonWrapper>
-      </HeaderSection>
-      <StRecipeList>{renderCards()}</StRecipeList>
+      <div>
+        <ImageSliderWrapper>
+          <ImageSlider images={images} />
+        </ImageSliderWrapper>
+        <HeaderWrapper>
+          <Tabs>
+            <Tab
+              $active={activeTab === 'popular'}
+              onClick={() => setActiveTab('popular')}
+            >
+              인기순
+            </Tab>
+            <Tab
+              $active={activeTab === 'latest'}
+              onClick={() => setActiveTab('latest')}
+            >
+              최신순
+            </Tab>
+            <Tab
+              $active={activeTab === 'favorites'}
+              onClick={() => setActiveTab('favorites')}
+            >
+              내가 찜한 목록
+            </Tab>
+          </Tabs>
+          <ButtonWrapper>
+            <Button color="#FE9F4D" size="small" onClick={goToPostWritingPage}>
+              레시피 작성
+            </Button>
+          </ButtonWrapper>
+        </HeaderWrapper>
+      </div>
+      {renderCards()}
     </MainContainer>
   );
 };
