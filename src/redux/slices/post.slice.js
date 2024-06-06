@@ -4,7 +4,7 @@ import supabase from "../../supabaseClient";
 const SUPABASE_RECIPE_POSTS = "RECIPE_POSTS";
 
 // Post create
-const createPost = createAsyncThunk(
+export const createPost = createAsyncThunk(
   "posts/createPost",
   async (post, { rejectWithValue }) => {
     try {
@@ -13,30 +13,70 @@ const createPost = createAsyncThunk(
         .insert(post)
         .select();
 
+      console.log(data);
+
       if (error) throw error;
 
-      return data;
+      return data[0];
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.message);
     }
   }
 );
 
-// Post Read
-const readPost = createAsyncThunk(
-  "posts/readPost",
-  async (postId, { rejectWithValue }) => {
+// Posts Read
+export const readPosts = createAsyncThunk(
+  "posts/readPosts",
+  async (_, { rejectWithValue }) => {
     try {
       const { data, error } = await supabase
         .from(SUPABASE_RECIPE_POSTS)
-        .select()
-        .eq("id", postId);
+        .select("*");
 
       if (error) throw error;
 
       return data;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Post Update
+export const updatePost = createAsyncThunk(
+  "posts/updatePost",
+  async (changedPost, { rejectWithValue }) => {
+    try {
+      const { data, error } = await supabase
+        .from(SUPABASE_RECIPE_POSTS)
+        .update(changedPost)
+        .eq("id", changedPost.id)
+        .select();
+
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Post Delete
+export const deletePost = createAsyncThunk(
+  "post/deletePost",
+  async (deleteId, { rejectWithValue }) => {
+    try {
+      const { error } = await supabase
+        .from(SUPABASE_RECIPE_POSTS)
+        .eq("id", deleteId)
+        .delete();
+
+      if (error) throw error;
+
+      return deleteId; // 삭제된 id 반환
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -44,7 +84,7 @@ const readPost = createAsyncThunk(
 const initialState = {
   posts: [],
   isPostLoading: false,
-  postError: null,
+  errorMessage: null,
 };
 
 const postSlice = createSlice({
@@ -53,16 +93,59 @@ const postSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // create
       .addCase(createPost.pending, (state) => {
         state.isPostLoading = true;
+        console.log(state.posts);
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.isPostLoading = false;
         state.posts = [action.payload, ...state.posts];
+        console.log(state.posts);
       })
       .addCase(createPost.rejected, (state, action) => {
         state.isPostLoading = false;
-        state.error = action.error.message;
+        state.errorMessage = action.error.message;
+        console.log(action.error.message);
+      })
+      // read
+      .addCase(readPosts.pending, (state) => {
+        state.isPostLoading = true;
+      })
+      .addCase(readPosts.fulfilled, (state, action) => {
+        state.isPostLoading = false;
+        state.posts = action.payload;
+        console.log(state.posts);
+      })
+      .addCase(readPosts.rejected, (state, action) => {
+        state.isPostLoading = false;
+        state.errorMessage = action.error.message;
+      })
+      // update
+      .addCase(updatePost.pending, (state) => {
+        state.isPostLoading = true;
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.isPostLoading = false;
+        state.posts = state.posts.map((post) =>
+          post.id === action.payload.id ? action.payload : post
+        );
+      })
+      .addCase(updatePost.rejected, (state, action) => {
+        state.isPostLoading = false;
+        state.errorMessage = action.error.message;
+      })
+      // delete
+      .addCase(deletePost.pending, (state) => {
+        state.isPostLoading = true;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.isPostLoading = false;
+        state.posts = state.posts.filter((post) => post.id !== action.payload);
+      })
+      .addCase(deletePost.rejected, (state, action) => {
+        state.isPostLoading = false;
+        state.errorMessage = action.error.message;
       });
   },
 });

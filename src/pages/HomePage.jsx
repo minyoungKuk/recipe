@@ -7,7 +7,8 @@ const HomePage = () => {
   // 레시피 작성 페이지로 이동
   const goToPostWritingPage = () => navigate("/write");
 
-  const goToPostDetailPage = () => navigate(`/post/12345678`);
+  const goToPostDetailPage = () =>
+    navigate(`/post/92b8266a-5b5f-4125-b979-245f5784bf83`);
 
   return (
     <div>
