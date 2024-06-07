@@ -62,14 +62,13 @@
 <img src="https://mjoukzlxxqktusvcfmcy.supabase.co/storage/v1/object/public/profile_image/readme/5.png" alt="게시물 캡쳐 이미지" width="100%">
 <br><br>
   
-#### 4. 
+#### 4. https://mjoukzlxxqktusvcfmcy.supabase.co/storage/v1/object/public/profile_image/readme/2.PNG
  회원가입과 로그인 기능은 깔끔한 디자인의 모달 형식으로 제공하며 사용자가 쉽게 이해하고 빠르게 회원가입할 수 있도록 설계되었습니다.
-<img src="https://mjoukzlxxqktusvcfmcy.supabase.co/storage/v1/object/public/profile_image/readme/2.PNG">alt="로그인 페이지 캡쳐 이미지" width="100%">
+<img src="https://mjoukzlxxqktusvcfmcy.supabase.co/storage/v1/object/public/profile_image/readme/5.png" alt="게시물 캡쳐 이미지" width="100%">
 <br><br>
-  
 #### 5. 
 마이페이지에는 사용자의 닉네임, 이메일 주소, 그리고 프로필 이미지를 나타내는 세 가지 요소가 표시되고 있습니다
-<img src="https://mjoukzlxxqktusvcfmcy.supabase.co/storage/v1/object/public/profile_image/readme/4.PNG" alt="리뷰 수정 캡쳐 삭제" width="100%">
+<img src="[https://mjoukzlxxqktusvcfmcy.supabase.co/storage/v1/object/public/profile_image/readme/4.PNG]" alt="리뷰 수정 캡쳐 삭제" width="100%">
 <br><br>
 
 ## 💻 팀원
