@@ -1,18 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import usePosts from "../hooks/usePosts";
 import useUser from "../hooks/useUser";
+import { openModal } from "../redux/slices/modal.slice";
 import Button from "./Button";
 
 const RecipeForm = ({ children, editType }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { postId } = useParams();
 
-  const user = useUser();
-  console.log(user);
+  const users = useUser();
   const { posts, handleCreateNewPost, handleUpdatePost } = usePosts();
 
+  const nickname = users.nickname;
   const [title, setTitle] = useState("");
   const [intro, setIntro] = useState("");
   const [ingredient, setIngredient] = useState("");
@@ -51,14 +54,21 @@ const RecipeForm = ({ children, editType }) => {
   // recipe post database에 반영하는 함수
   const clickSubmitButton = () => {
     if (!title || !intro || !ingredient || !order || !imgPath) {
-      alert("게시글 양식에 맞게 작성해주세요:(");
+      dispatch(
+        openModal({
+          modalType: "alert",
+          modalProps: {
+            message: "입력하지 않은 부분이 없게 작성해주세요",
+          },
+        })
+      );
       return;
     }
 
     // create
     if (editType === "create") {
       const newRecipeItem = {
-        nickname: "닉네임",
+        nickname,
         recipe_title: title,
         recipe_intro: intro,
         recipe_ingredient: ingredient,
@@ -72,7 +82,7 @@ const RecipeForm = ({ children, editType }) => {
       // update
       const newRecipeItem = {
         id: postId,
-        nickname: "닉네임",
+        nickname,
         recipe_title: title,
         recipe_intro: intro,
         recipe_ingredient: ingredient,

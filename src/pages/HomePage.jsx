@@ -11,35 +11,12 @@ const MainContainer = styled.main`
   max-width: 1080px;
   margin: auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ImagePlaceholder = styled.div`
-  width: 100%;
-  height: 300px;
-  background-color: #ececec;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-  color: black;
-  text-align: center;
-`;
-
-const HeaderSection = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  flex-wrap: wrap;
 `;
 
 const Tabs = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 const Tab = styled.button`
@@ -49,8 +26,8 @@ const Tab = styled.button`
   cursor: pointer;
   background: none;
   border: none;
-  border-bottom: ${(props) => (props.active ? "2px solid #FE9F4D" : "none")};
-  color: ${(props) => (props.active ? "#FE9F4D" : "#000")};
+  border-bottom: ${(props) => (props.$active ? "2px solid #FE9F4D" : "none")};
+  color: ${(props) => (props.$active ? "#FE9F4D" : "#000")};
 
   &:focus {
     outline: none;
@@ -62,15 +39,34 @@ const ButtonWrapper = styled.div`
   justify-content: flex-end;
 `;
 
+const ImageSliderWrapper = styled.div`
+  width: 1080px;
+
+  img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+  }
+`;
+
+const HeaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  margin: 0 10px;
+`;
+
 const StRecipeList = styled.ul`
   max-width: 1080px;
   display: flex;
   flex-wrap: wrap;
   list-style: none;
-  gap: 25px;
 
   margin: 0 auto;
   padding: 20px 40px;
+  gap: 25px;
+  border-top: 1px solid #fecca0;
 `;
 
 const HomePage = () => {
@@ -93,6 +89,8 @@ const HomePage = () => {
 
   const [activeTab, setActiveTab] = useState("popular");
 
+  const image = "public/images/image3.jpg";
+
   const renderCards = () => {
     const { posts } = usePosts();
     if (!posts) return null;
@@ -106,15 +104,14 @@ const HomePage = () => {
           <ListCard key={post.id} post={post} />
         ));
       case "latest": // 최신순
-        const sortedPostsBtDate = [...posts].sort(
+        const sortedPostsByDate = [...posts].sort(
           (a, b) => new Date(b.created_at) - new Date(a.created_at)
         );
-        console.log(sortedPostsBtDate);
-        return sortedPostsBtDate.map((post) => (
+
+        return sortedPostsByDate.map((post) => (
           <ListCard key={post.id} post={post} />
         ));
-      case "favorites": // 내가 좋아요한 레시피
-        return posts.map((post) => <ListCard key={post.id} post={post} />);
+
       default:
         return null;
     }
@@ -122,37 +119,32 @@ const HomePage = () => {
 
   return (
     <MainContainer>
-      <ImagePlaceholder>
-        <div>오늘 뭐 먹지?</div>
-        <div>레시피를 공유해 보세요!!</div>
-      </ImagePlaceholder>
-      <HeaderSection>
-        <Tabs>
-          <Tab
-            active={activeTab === "popular"}
-            onClick={() => setActiveTab("popular")}
-          >
-            인기순
-          </Tab>
-          <Tab
-            active={activeTab === "latest"}
-            onClick={() => setActiveTab("latest")}
-          >
-            최신순
-          </Tab>
-          <Tab
-            active={activeTab === "favorites"}
-            onClick={() => setActiveTab("favorites")}
-          >
-            내가 좋아요한 레시피
-          </Tab>
-        </Tabs>
-        <ButtonWrapper>
-          <Button color="#FE9F4D" size="small" onClick={goToPostWritingPage}>
-            레시피 작성
-          </Button>
-        </ButtonWrapper>
-      </HeaderSection>
+      <div>
+        <ImageSliderWrapper>
+          <img src={image} />
+        </ImageSliderWrapper>
+        <HeaderWrapper>
+          <Tabs>
+            <Tab
+              $active={activeTab === "popular"}
+              onClick={() => setActiveTab("popular")}
+            >
+              인기순
+            </Tab>
+            <Tab
+              $active={activeTab === "latest"}
+              onClick={() => setActiveTab("latest")}
+            >
+              최신순
+            </Tab>
+          </Tabs>
+          <ButtonWrapper>
+            <Button color="#FE9F4D" size="small" onClick={goToPostWritingPage}>
+              레시피 작성
+            </Button>
+          </ButtonWrapper>
+        </HeaderWrapper>
+      </div>
       <StRecipeList>{renderCards()}</StRecipeList>
     </MainContainer>
   );

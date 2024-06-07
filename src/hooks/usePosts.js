@@ -23,8 +23,9 @@ const usePosts = () => {
   const handleUpdatePost = (post) =>
     dispatch(updatePost(post)).then(() => dispatch(readPosts()));
 
-  const handleDeletePost = (postId) =>
-    dispatch(deletePost(postId)).then(() => dispatch(deletePost()));
+  const handleDeletePost = (postId) => {
+    dispatch(deletePost(postId));
+  };
 
   return {
     posts,

@@ -65,7 +65,6 @@ export const signOut = createAsyncThunk("auth/signOut", async (_, thunkAPI) => {
     await supabase.auth.signOut();
     thunkAPI.dispatch(logout());
   } catch (error) {
-    console.log("error", error);
     return thunkAPI.rejectWithValue(error.message);
   }
 });

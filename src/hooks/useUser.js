@@ -1,16 +1,27 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../redux/slices/user.slice";
+import { useEffect, useState } from "react";
+import supabase from "../supabaseClient";
 import useGetUserEmail from "./useGetUserEmail ";
 
 const useUser = () => {
-  const dispatch = useDispatch();
+  const [user, setUser] = useState({});
   const email = useGetUserEmail();
-  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
-    dispatch(getUser(email));
-  }, [dispatch]);
+    if (!email) return;
+    const getUserInfo = async () => {
+      const { data } = await supabase
+        .from("users")
+        .select()
+        .eq("email", email)
+        .single();
+
+      if (data) {
+        setUser(data);
+      }
+    };
+
+    getUserInfo();
+  }, [email]);
 
   return user;
 };
