@@ -7,7 +7,7 @@
 <br>
 
 <p align="center">
-  <img src="https://mjoukzlxxqktusvcfmcy.supabase.co/storage/v1/object/public/profile_image/readme/__.PNG" width="800" height="450">
+  <img src="https://mjoukzlxxqktusvcfmcy.supabase.co/storage/v1/object/public/profile_image/readme/1.PNG" width="800" height="450">
 </p>
 
 <br>
