@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { setIsLoginOpen, signOut } from "../redux/slices/auth.slice";
@@ -33,10 +33,9 @@ const ButtonWrapperWithMargin = styled.div`
     margin-left: 20px;
   }
 `;
-const Header = ({ isLoggedIn, onLogout }) => {
+const Header = ({ isLoggedIn }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoginOpen = useSelector((state) => state.auth.isLoginOpen);
   const handleLogoClick = () => {
     navigate("/");
   };
@@ -49,6 +48,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
   }, [dispatch]);
   const handleLogoutClick = () => {
     dispatch(signOut());
+    navigate("/");
   };
   return (
     <StyledHeaderContainer>
