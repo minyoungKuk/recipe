@@ -96,11 +96,11 @@ const HomePage = () => {
     if (!posts) return null;
 
     switch (activeTab) {
-      case "popular": // 인기순
-        const sortedPostsByPopular = [...posts].sort(
-          (a, b) => b.total_likes - a.total_likes
+      case "popular": // 이름순
+        const sortedPostsByName = [...posts].sort((a, b) =>
+          a.recipe_title.toLowerCase() < b.recipe_title.toLowerCase() ? -1 : 1
         );
-        return sortedPostsByPopular.map((post) => (
+        return sortedPostsByName.map((post) => (
           <ListCard key={post.id} post={post} />
         ));
       case "latest": // 최신순
@@ -129,7 +129,7 @@ const HomePage = () => {
               $active={activeTab === "popular"}
               onClick={() => setActiveTab("popular")}
             >
-              인기순
+              이름순
             </Tab>
             <Tab
               $active={activeTab === "latest"}

@@ -2,11 +2,9 @@ import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
 import { setIsLoginOpen, signOut } from "../redux/slices/auth.slice";
 import { openModal } from "../redux/slices/modal.slice";
 import Button from "./Button";
-
 const StyledHeaderContainer = styled.header`
   box-sizing: border-box;
   width: 100%;
@@ -19,46 +17,39 @@ const StyledHeaderContainer = styled.header`
   border-bottom: 1px solid #d9d9d9;
   padding: 20px;
 `;
-
 const StyledLogo = styled.img`
   width: 180px;
   height: auto;
   cursor: pointer;
 `;
-
 const StyledButtonContainer = styled.div`
   display: flex;
   align-items: center;
 `;
-
 const ButtonWrapperWithMargin = styled.div`
-  width: 300px;
   display: flex;
   justify-content: space-between;
+  button {
+    margin-left: 20px;
+  }
 `;
-
 const Header = ({ isLoggedIn, onLogout }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoginOpen = useSelector((state) => state.auth.isLoginOpen);
-
   const handleLogoClick = () => {
     navigate("/");
   };
-
   const handleMyPageClick = () => {
     navigate("/mypage");
   };
-
   const handleLoginClick = useCallback(() => {
     dispatch(openModal({ modalType: "login" }));
     dispatch(setIsLoginOpen(true));
   }, [dispatch]);
-
   const handleLogoutClick = () => {
     dispatch(signOut());
   };
-
   return (
     <StyledHeaderContainer>
       <StyledLogo
@@ -68,9 +59,11 @@ const Header = ({ isLoggedIn, onLogout }) => {
       />
       <StyledButtonContainer>
         <ButtonWrapperWithMargin>
-          <Button color="#FE9F4D" size="small" onClick={handleMyPageClick}>
-            마이페이지
-          </Button>
+          {isLoggedIn && (
+            <Button color="#FE9F4D" size="small" onClick={handleMyPageClick}>
+              마이페이지
+            </Button>
+          )}
           {isLoggedIn ? (
             <Button color="#FE9234" size="small" onClick={handleLogoutClick}>
               로그아웃
@@ -85,5 +78,4 @@ const Header = ({ isLoggedIn, onLogout }) => {
     </StyledHeaderContainer>
   );
 };
-
 export default Header;
