@@ -89,7 +89,7 @@ const HomePage = () => {
 
   const [activeTab, setActiveTab] = useState("popular");
 
-  const image = "public/images/image3.jpg";
+  const image = "/images/image3.jpg";
 
   const renderCards = () => {
     const { posts } = usePosts();
