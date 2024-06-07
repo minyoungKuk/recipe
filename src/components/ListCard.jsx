@@ -28,7 +28,7 @@ const StRecipeImage = styled.div`
   height: 0;
   padding-bottom: 80%;
   background-color: #eaeaea;
-  background-image: url(${(props) => props.url}); //이미지주소
+  background-image: url(${(props) => props.$url}); //이미지주소
   background-size: cover;
   border-radius: 12px;
   margin-top: 20px;
@@ -83,7 +83,7 @@ export default function ListCard({ post }) {
 
   return (
     <StRecipeItem onClick={goToDetailPage}>
-      <StRecipeImage url={imgUrl} />
+      <StRecipeImage $url={imgUrl} />
       <StRecipeName>{title}</StRecipeName>
       <StRecipeDescriptionWrapper>
         <StRecipeDescription>{intro}</StRecipeDescription>
