@@ -13,8 +13,6 @@ export const createPost = createAsyncThunk(
         .insert(post)
         .select();
 
-      console.log(data);
-
       if (error) throw error;
 
       return data[0];
@@ -69,8 +67,8 @@ export const deletePost = createAsyncThunk(
     try {
       const { error } = await supabase
         .from(SUPABASE_RECIPE_POSTS)
-        .eq("id", deleteId)
-        .delete();
+        .delete()
+        .eq("id", deleteId);
 
       if (error) throw error;
 

@@ -76,7 +76,6 @@ export default function ListCard({ post }) {
     recipe_title: title,
     recipe_intro: intro,
     nickname,
-    total_likes: likes,
     recipe_image_url: imgUrl,
   } = post;
 
@@ -92,7 +91,7 @@ export default function ListCard({ post }) {
       <StAdditionalInfoWrapper>
         <StNickname>{nickname}</StNickname>
         <StCount>
-          {likes} <span>♥</span>
+          <span>🟠</span>
         </StCount>
       </StAdditionalInfoWrapper>
     </StRecipeItem>

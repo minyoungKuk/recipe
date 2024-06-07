@@ -17,9 +17,9 @@ const ConfirmModal = ({ message }) => {
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <p> {message} </p>
+    <div className="modal-content">
+      <p> {message} </p>
+      <div className="modal-btn-wrap">
         <Button color="#ff851b" onClick={handleConfirm}>
           확인
         </Button>

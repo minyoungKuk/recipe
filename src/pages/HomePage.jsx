@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import Button from '../components/Button';
-import ListCard from '../components/ListCard';
-import usePosts from '../hooks/usePosts';
-import ImageSlider from '../components/Slider';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Button from "../components/Button";
+import ListCard from "../components/ListCard";
+import usePosts from "../hooks/usePosts";
+import { openModal } from "../redux/slices/modal.slice";
 
 const MainContainer = styled.main`
   max-width: 1080px;
   margin: auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 `;
 
 const Tabs = styled.div`
@@ -26,8 +26,8 @@ const Tab = styled.button`
   cursor: pointer;
   background: none;
   border: none;
-  border-bottom: ${(props) => (props.$active ? '2px solid #FE9F4D' : 'none')};
-  color: ${(props) => (props.$active ? '#FE9F4D' : '#000')};
+  border-bottom: ${(props) => (props.$active ? "2px solid #FE9F4D" : "none")};
+  color: ${(props) => (props.$active ? "#FE9F4D" : "#000")};
 
   &:focus {
     outline: none;
@@ -41,6 +41,12 @@ const ButtonWrapper = styled.div`
 
 const ImageSliderWrapper = styled.div`
   width: 1080px;
+
+  img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+  }
 `;
 
 const HeaderWrapper = styled.div`
@@ -51,38 +57,61 @@ const HeaderWrapper = styled.div`
   margin: 0 10px;
 `;
 
+const StRecipeList = styled.ul`
+  max-width: 1080px;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+
+  margin: 0 auto;
+  padding: 20px 40px;
+  gap: 25px;
+  border-top: 1px solid #fecca0;
+`;
+
 const HomePage = () => {
   const navigate = useNavigate();
-  const goToPostWritingPage = () => navigate('/write');
-  const [activeTab, setActiveTab] = useState('popular');
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const images = [
-    'public/images/image1.jpg',
-    'public/images/image2.jpg',
-    'public/images/image3.jpg',
-  ];
+  // 로그인 상태일 시 작성 페이지로 이동
+  const goToPostWritingPage = () => {
+    if (isLoggedIn) navigate("/write");
+    else {
+      dispatch(
+        openModal({
+          modalType: "alert",
+          modalProps: { message: "로그인 후 이용해 주세요" },
+        })
+      );
+    }
+  };
+
+  const [activeTab, setActiveTab] = useState("popular");
+
+  const image = "public/images/image3.jpg";
 
   const renderCards = () => {
     const { posts } = usePosts();
     if (!posts) return null;
 
     switch (activeTab) {
-      case 'popular':
+      case "popular": // 인기순
         const sortedPostsByPopular = [...posts].sort(
           (a, b) => b.total_likes - a.total_likes
         );
         return sortedPostsByPopular.map((post) => (
           <ListCard key={post.id} post={post} />
         ));
-      case 'latest':
+      case "latest": // 최신순
         const sortedPostsByDate = [...posts].sort(
           (a, b) => new Date(b.created_at) - new Date(a.created_at)
         );
+
         return sortedPostsByDate.map((post) => (
           <ListCard key={post.id} post={post} />
         ));
-      case 'favorites':
-        return posts.map((post) => <ListCard key={post.id} post={post} />);
+
       default:
         return null;
     }
@@ -92,27 +121,21 @@ const HomePage = () => {
     <MainContainer>
       <div>
         <ImageSliderWrapper>
-          <ImageSlider images={images} />
+          <img src={image} />
         </ImageSliderWrapper>
         <HeaderWrapper>
           <Tabs>
             <Tab
-              $active={activeTab === 'popular'}
-              onClick={() => setActiveTab('popular')}
+              $active={activeTab === "popular"}
+              onClick={() => setActiveTab("popular")}
             >
               인기순
             </Tab>
             <Tab
-              $active={activeTab === 'latest'}
-              onClick={() => setActiveTab('latest')}
+              $active={activeTab === "latest"}
+              onClick={() => setActiveTab("latest")}
             >
               최신순
-            </Tab>
-            <Tab
-              $active={activeTab === 'favorites'}
-              onClick={() => setActiveTab('favorites')}
-            >
-              내가 찜한 목록
             </Tab>
           </Tabs>
           <ButtonWrapper>
@@ -122,7 +145,7 @@ const HomePage = () => {
           </ButtonWrapper>
         </HeaderWrapper>
       </div>
-      {renderCards()}
+      <StRecipeList>{renderCards()}</StRecipeList>
     </MainContainer>
   );
 };

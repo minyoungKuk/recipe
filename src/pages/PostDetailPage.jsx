@@ -1,15 +1,20 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import BackButton from "../components/BackButton";
 import Button from "../components/Button";
 import usePosts from "../hooks/usePosts";
+import useUser from "../hooks/useUser";
 
 const PostDetailPage = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
+  const users = useUser();
   const { posts, handleDeletePost } = usePosts();
+  const myNickname = users.nickname;
 
   const detailPost = posts.find((post) => post.id === postId);
   if (!detailPost) return null;
@@ -22,7 +27,6 @@ const PostDetailPage = () => {
     recipe_intro: intro,
     recipe_ingredient: ingredient,
     recipe_order: order,
-    total_likes: likes,
     recipe_image_url: imageUrl,
   } = detailPost;
 
@@ -41,7 +45,6 @@ const PostDetailPage = () => {
       <div className="wrapper">
         <TitleDiv>
           <h1>{title}</h1>
-          <span>{likes} ❤️</span>
         </TitleDiv>
         <WriterSpan>{`by ${nickname}. ${date.slice(0, 10)}`}</WriterSpan>
         <FoodImage src={imageUrl} />
@@ -56,14 +59,18 @@ const PostDetailPage = () => {
           <b>레시피 순서</b>
           <p>{order}</p>
         </Part>
-        <EditButtonDiv>
-          <Button color="#FE9F4D" onClick={goToEditPage}>
-            수정
-          </Button>
-          <Button color="#FE9F4D" onClick={clickDeleteButton}>
-            삭제
-          </Button>
-        </EditButtonDiv>
+        {isLoggedIn && myNickname === nickname ? (
+          <EditButtonDiv>
+            <Button color="#FE9F4D" onClick={goToEditPage}>
+              수정
+            </Button>
+            <Button color="#FE9F4D" onClick={clickDeleteButton}>
+              삭제
+            </Button>
+          </EditButtonDiv>
+        ) : (
+          ""
+        )}
       </div>
     </main>
   );
@@ -82,12 +89,6 @@ const TitleDiv = styled.div`
     margin-left: 0;
     margin-right: 0;
     font-weight: bold;
-  }
-
-  span {
-    margin-left: 10px;
-    font-size: 15px;
-    color: red;
   }
 `;
 

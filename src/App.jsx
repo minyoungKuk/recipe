@@ -21,9 +21,7 @@ function App() {
         if (session) {
           dispatch(setUser(session.user));
         }
-      } catch (error) {
-        console.error("session error", error.message);
-      }
+      } catch (error) {}
     };
 
     fetchSession();
