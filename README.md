@@ -68,7 +68,7 @@
 <br><br>
 #### 5. 
 마이페이지에는 사용자의 닉네임, 이메일 주소, 그리고 프로필 이미지를 나타내는 세 가지 요소가 표시되고 있습니다
-<img src="[https://mjoukzlxxqktusvcfmcy.supabase.co/storage/v1/object/public/profile_image/readme/4.PNG]" alt="리뷰 수정 캡쳐 삭제" width="100%">
+<img src="https://mjoukzlxxqktusvcfmcy.supabase.co/storage/v1/object/public/profile_image/readme/4.PNG" alt="리뷰 수정 캡쳐 삭제" width="100%">
 <br><br>
 
 ## 💻 팀원
